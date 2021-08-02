@@ -1,0 +1,21 @@
+services:
+  tmgmt_lokalise.service:
+    class: Drupal\tmgmt_lokalise\Service\Service
+    arguments:
+      - '@entity_type.manager'
+  tmgmt_lokalise.helper:
+    class: Drupal\tmgmt_lokalise\Service\Helper
+    arguments:
+      - '@tmgmt_lokalise.service'
+      - '@entity_type.manager'
+  tmgmt_lokalise.export:
+    class: Drupal\tmgmt_lokalise\Service\Export
+    arguments:
+      - '@tmgmt_lokalise.service'
+      - '@tmgmt.data'
+  tmgmt_lokalise.import:
+    class: Drupal\tmgmt_lokalise\Service\Import
+    arguments:
+      - '@tmgmt_lokalise.service'
+      - '@tmgmt.data'
+      - '@file_system'

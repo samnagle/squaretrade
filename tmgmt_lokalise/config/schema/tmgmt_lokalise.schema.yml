@@ -1,0 +1,32 @@
+tmgmt.translator.settings.lokalise:
+  type: mapping
+  mapping:
+    api_token:
+      type: string
+      label: API token
+    team_id:
+      type: string
+      label: Team ID
+    card_id:
+      type: string
+      label: Card ID
+    provider:
+      type: string
+      label: Default provider
+    languages:
+      type: mapping
+      provider:
+        type: string
+        label: Language translation provider
+      group:
+        type: string
+        label: Language review group
+    download:
+      type: boolean
+      label: Download finished translations
+    review:
+      type: boolean
+      label: Review translations in Lokalise
+    delete_finished:
+      type: boolean
+      label: Delete finished projects in Lokalise
