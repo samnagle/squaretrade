@@ -1,0 +1,173 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the lingotek module.
+ */
+
+use Drupal\Core\Field\BaseFieldDefinition;
+use Drupal\Core\StringTranslation\TranslatableMarkup;
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Lingotek module.
+ */
+
+/**
+ * Implements hook_install().
+ */
+function lingotek_install() {
+  // Assign a fairly low weight to ensure our implementation of
+  // hook_module_implements_alter() is run after content_translation.
+  module_set_weight('lingotek', 15);
+}
+
+/**
+ * Implements hook_schema().
+ */
+function lingotek_schema() {
+  $schema['lingotek_content_metadata'] = [
+    'description' => 'Stores Lingotek-related metadata about Drupal entities.',
+    'fields' => [
+      'document_id' => [
+        'description' => 'The Lingotek document identifier.',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'entity_type' => [
+        'description' => 'The entity type (node, comment, etc.).',
+        'type' => 'varchar',
+        'length' => 128,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'entity_id' => [
+        'description' => 'The primary identifier for the entity.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+    ],
+    'primary key' => [
+      'document_id',
+    ],
+  ];
+
+  $schema['lingotek_translation_agent'] = [
+    'description' => 'An assignment of IDs to agents from which translations were added.',
+    'fields' => [
+      'id' => [
+        'description' => 'the ID assigned to a given translation agent.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'name' => [
+        'description' => 'The name of a given tool for adding translations.',
+        'type' => 'varchar',
+        'length' => 63,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+    ],
+    'primary key' => [
+      'id',
+    ],
+  ];
+  $schema['lingotek_config_map'] = [
+    'description' => 'An assignment of lids from locales_source and locales_target to set_ids for translation by Lingotek.',
+    'fields' => [
+      'lid' => [
+        'description' => 'The ID assigned by the i18n_string module.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'set_id' => [
+        'description' => 'The ID of the set assigned to the string by the Lingotek Translation module.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'current' => [
+        'description' => 'Tells whether the translation for the individual config item is dirty and needs to be updated or not.',
+        'type' => 'int',
+        'size' => 'tiny',
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+    ],
+    'primary key' => [
+      'lid',
+    ],
+  ];
+
+  return $schema;
+}
+
+/**
+ * Implements hook_update_last_removed().
+ */
+function lingotek_update_last_removed() {
+  return 8220;
+}
+
+/**
+ * Removes Lingotek Content Cloud unused settings.
+ */
+function lingotek_update_8221() {
+  $lingotekSettings = \Drupal::configFactory()->getEditable('lingotek.settings');
+  $lingotekSettings->clear('preference.enable_content_cloud');
+  $lingotekSettings->clear('preference.content_cloud_import_format');
+  $lingotekSettings->clear('preference.content_cloud_import_status');
+  $lingotekSettings->save();
+}
+
+/**
+ * Adds enable_download_interim preference to lingotek.settings.
+ */
+function lingotek_update_8222() {
+  // Default will be FALSE, but as we want to maintain the current behavior we
+  // set this to TRUE.
+  $lingotekSettings = \Drupal::configFactory()->getEditable('lingotek.settings');
+  $lingotekSettings->set('preference.enable_download_interim', TRUE);
+  $lingotekSettings->save();
+}
+
+/**
+ * Adds enable_download_interim preference to lingotek.settings.
+ */
+function lingotek_update_9000() {
+  // We converted this to a boolean.
+  $lingotekSettings = \Drupal::configFactory()->getEditable('lingotek.settings');
+  $preference = $lingotekSettings->get('preference.append_type_to_title', NULL);
+  if ($preference === 'global_setting') {
+    $lingotekSettings->set('preference.append_type_to_title', TRUE);
+    $lingotekSettings->save();
+  }
+}
+
+/**
+ * Adds initial upload and updated date fields to Lingotek metadata entities.
+ */
+function lingotek_update_9401() {
+  $fields = [];
+  $fields['updated_timestamp'] = BaseFieldDefinition::create('timestamp')
+    ->setLabel(new TranslatableMarkup('Updated timestamp'))
+    ->setDescription(new TranslatableMarkup('The last time document was updated.'));
+
+  $fields['uploaded_timestamp'] = BaseFieldDefinition::create('timestamp')
+    ->setLabel(new TranslatableMarkup('Initial upload'))
+    ->setDescription(new TranslatableMarkup('The time of the initial upload.'));
+
+  $entity_definition_update_manager = \Drupal::entityDefinitionUpdateManager();
+  foreach ($fields as $name => $storage_definition) {
+    $entity_definition_update_manager->installFieldStorageDefinition($name, 'lingotek_content_metadata', 'lingotek', $storage_definition);
+  }
+}

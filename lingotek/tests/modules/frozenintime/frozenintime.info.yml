@@ -1,0 +1,9 @@
+name: Frozen in time
+type: module
+package: Testing
+description: 'Ensures time is frozen by overriding "datetime.time" service.'
+
+# Information added by Drupal.org packaging script on 2021-07-19
+version: '3.7.0'
+project: 'lingotek'
+datestamp: 1626713430

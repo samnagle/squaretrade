@@ -1,0 +1,55 @@
+lingotek.dashboard:
+  route_name: 'lingotek.config.dashboard'
+  base_route: lingotek.dashboard
+  title: 'Dashboard'
+  weight: -10
+
+lingotek.settings:
+  route_name: lingotek.settings
+  base_route: lingotek.dashboard
+  title: 'Settings'
+  weight: -5
+
+lingotek.manage:
+  route_name: lingotek.manage
+  base_route: lingotek.dashboard
+  title: 'Content'
+  weight: -9
+
+lingotek.manage_config:
+  route_name: lingotek.manage_config
+  base_route: lingotek.dashboard
+  title: 'Config'
+  weight: -8
+
+lingotek.manage_interface_translation:
+  route_name: lingotek.manage_interface_translation
+  base_route: lingotek.dashboard
+  title: 'User Interface'
+  weight: -7
+
+lingotek.translation_jobs:
+  route_name: lingotek.translation_jobs
+  base_route: lingotek.dashboard
+  title: 'Translation Jobs'
+  weight: -6
+
+lingotek.translation_job_info.content:
+  route_name: lingotek.translation_job_info.content
+  base_route: lingotek.translation_job_info.content
+  class: 'Drupal\lingotek\Plugin\Menu\JobContentLocalTask'
+
+lingotek.translation_job_info.config:
+  route_name: lingotek.translation_job_info.config
+  base_route: lingotek.translation_job_info.content
+  class: 'Drupal\lingotek\Plugin\Menu\JobConfigLocalTask'
+
+lingotek.manage.content:
+  deriver: 'Drupal\lingotek\Plugin\Derivative\ContentTranslationLocalTasks'
+  weight: 100
+
+lingotek.entity.manage:
+  route_name: lingotek.entity.manage
+  title: 'Manage Translations'
+  base_route: entity.node.canonical
+  weight: 100

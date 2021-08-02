@@ -1,0 +1,34 @@
+name: Lingotek Translation
+type: module
+description: 'Translates content, configuration, and interface using the Lingotek Translation Management System.'
+package: Multilingual
+core_version_requirement: ^8.8 || ^9
+hidden: false
+configure: lingotek.settings
+dependencies:
+  - drupal:locale
+  - drupal:language
+  - drupal:content_translation
+  - drupal:config_translation
+
+test_dependencies:
+  - metatag:metatag
+  - paragraphs:paragraphs
+  - pathauto:pathauto
+  - workbench_moderation:workbench_moderation
+  - group:group
+  - bricks:bricks
+  - search_api:search_api
+  - entity_usage:entity_usage
+  - entity_browser:entity_browser
+  - block_field:block_field
+  - paragraphs_asymmetric_translation_widgets:paragraphs_asymmetric_translation_widgets
+  - potx:potx
+  - layout_builder_st:layout_builder_st
+  - layout_builder_at:layout_builder_at
+  - webform:webform
+
+# Information added by Drupal.org packaging script on 2021-07-19
+version: '3.7.0'
+project: 'lingotek'
+datestamp: 1626713430

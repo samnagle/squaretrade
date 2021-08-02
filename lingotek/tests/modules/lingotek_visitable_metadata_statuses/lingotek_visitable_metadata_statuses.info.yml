@@ -1,0 +1,12 @@
+name: Lingotek Visitable Metadata Test Helper with statuses
+type: module
+package: Testing
+
+dependencies:
+  - lingotek:lingotek
+  - lingotek:lingotek_visitable_metadata
+
+# Information added by Drupal.org packaging script on 2021-07-19
+version: '3.7.0'
+project: 'lingotek'
+datestamp: 1626713430

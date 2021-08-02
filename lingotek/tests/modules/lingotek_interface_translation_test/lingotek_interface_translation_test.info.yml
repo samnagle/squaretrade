@@ -1,0 +1,11 @@
+name: Lingotek Interface Translation Test Helper
+type: module
+package: Testing
+
+dependencies:
+  - lingotek:lingotek
+
+# Information added by Drupal.org packaging script on 2021-07-19
+version: '3.7.0'
+project: 'lingotek'
+datestamp: 1626713430

@@ -1,0 +1,51 @@
+{#
+/**
+ * @file
+ * Default theme implementation of the Lingotek target status.
+ *
+ * Available variables:
+ *   - entity: The entity which status we want to display.
+ *   - language: The language code.
+ *   - status: The status for that translation.
+ *   - url: An optional \Drupal\Core\Url object.
+ *   - new_window: A flag indicating if the link should be opened in a new window.
+ *   - status_text: The status text, mainly though for link title.
+ *
+ * @see template_preprocess()
+ * @see template_preprocess_lingotek_target_status()
+ *
+ * @ingroup themeable
+ */
+#}
+
+{% set text = language|upper %}
+{% set attributes = create_attribute()
+  .setAttribute('title', status_text)
+  .addClass('language-icon')
+  .addClass('target-' ~ status|lower) %}
+{% set toggle_attributes = create_attribute()
+  .addClass('language-icon')
+  .addClass('lingotek-target-dropdown-toggle')
+  .addClass('target-' ~ status|lower) %}
+
+{% if actions %}
+<ul class="lingotek-target-dropdown">
+{% endif %}
+{% if url %}
+  <a href="{{ url }}" {% if new_window %}target="_blank"{% endif %} {{ attributes }}>{{ text }}</a>
+{% else %}
+  <span {{ attributes }}>{{ text }}</span>
+{% endif %}
+
+{% if actions %}
+  <button {{ toggle_attributes }}><span class="visually-hidden">{% trans %}Toggle Actions{% endtrans %}</span></button>
+  <ul class="lingotek-target-actions" {{ toggle_attributes }}>
+    {% for action in actions %}
+    <li>
+      <a href="{{ action.url }}" {% if action.new_window %}target="_blank"{% endif %}>{{ action.title }}</a>
+    </li>
+    {% endfor %}
+  </ul>
+  </div>
+{% endif %}
+</div>
